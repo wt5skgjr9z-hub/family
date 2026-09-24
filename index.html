@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История Нашей Семьи</title>
+    <!-- Подключаем красивые шрифты -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #fff5eb; /* Теплый кремовый фон */
+            --primary-color: #ff8b73; /* Радостный персиковый/коралловый */
+            --primary-hover: #ff6f50;
+            --text-dark: #4a3f3a;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        header {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, #ffd3b6, #ffaaa5);
+            border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: 3.5rem;
+            color: #ffffff;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #fff;
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: -20px auto 40px auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(255, 139, 115, 0.3);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(255, 139, 115, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Галерея */
+        .gallery {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .img-container {
+            width: 100%;
+            height: 300px;
+            background-color: #f0e6e0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .card:hover .img-container img {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            display: none; /* Скрыто по умолчанию */
+        }
+
+        .card-buttons {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .btn-small {
+            flex: 1;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            background-color: #fff;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-small:hover {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .btn-like {
+            background-color: #fff;
+            color: #ff4757;
+            border: 2px solid #ff4757;
+        }
+        .btn-like:hover, .btn-like.liked {
+            background-color: #ff4757;
+            color: #fff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 50px;
+            background-color: #fff;
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        /* Конфетти стили */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: #f2d74e;
+            top: -10px;
+            z-index: 9999;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(720deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Наша Любимая Семья</h1>
+        <div class="subtitle">Самые теплые и радостные моменты вместе ❤️</div>
+    </header>
+
+    <div class="controls">
+        <button class="btn" onclick="showAllDescriptions()">📖 Читать все истории</button>
+        <button class="btn" onclick="createParty()">🎉 Сделать праздник!</button>
+    </div>
+
+    <div class="gallery" id="gallery">
+        <!-- Карточка 1 -->
+        <div class="card">
+            <div class="img-container">
+                <img src="IMG_6680.jpeg" alt="Показываем язычки">
+            </div>
+            <div class="card-content">
+                <div class="description">На этой фотке мы весело дурачимся и показываем в камеру язычки! 😛</div>
+                <div class="card-buttons">
+                    <button class="btn btn-small btn-toggle" onclick="toggleText(this)">✨ История</button>
+                    <button class="btn btn-small btn-like" onclick="toggleLike(this)">🤍 Лайк</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 2 -->
+        <div class="card">
+            <div class="img-container">
+                <img src="IMG_6685.png" alt="С мамой на море">
+            </div>
+            <div class="card-content">
+                <div class="description">Прекрасный день: на этой фотке мы с мамой отдыхаем на море. 🌊☀️</div>
+                <div class="card-buttons">
+                    <button class="btn btn-small btn-toggle" onclick="toggleText(this)">✨ История</button>
+                    <button class="btn btn-small btn-like" onclick="toggleLike(this)">🤍 Лайк</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 3 -->
+        <div class="card">
+            <div class="img-container">
+                <img src="IMG_6687.jpeg" alt="В лифте">
+            </div>
+            <div class="card-content">
+                <div class="description">Тут стоит моя сестра и ее муж — они сфоткались в лифте, а рядом с ними стоят два мелких братика. 👦👦</div>
+                <div class="card-buttons">
+                    <button class="btn btn-small btn-toggle" onclick="toggleText(this)">✨ История</button>
+                    <button class="btn btn-small btn-like" onclick="toggleLike(this)">🤍 Лайк</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 4 -->
+        <div class="card">
+            <div class="img-container">
+                <img src="IMG_6688.jpeg" alt="Бабушка с внуками">
+            </div>
+            <div class="card-content">
+                <div class="description">Бабушка с двумя внуками сидят на лавочке в ЗАГСе. Это было до того, как сестра вышла замуж. 👵💐</div>
+                <div class="card-buttons">
+                    <button class="btn btn-small btn-toggle" onclick="toggleText(this)">✨ История</button>
+                    <button class="btn btn-small btn-like" onclick="toggleLike(this)">🤍 Лайк</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 5 -->
+        <div class="card">
+            <div class="img-container">
+                <img src="IMG_6689.jpeg" alt="Я с мамой, старая фотка">
+            </div>
+            <div class="card-content">
+                <div class="description">Очень старая, но такая родная фотка — я стою со своей мамой. 🕰️❤️</div>
+                <div class="card-buttons">
+                    <button class="btn btn-small btn-toggle" onclick="toggleText(this)">✨ История</button>
+                    <button class="btn btn-small btn-like" onclick="toggleLike(this)">🤍 Лайк</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 6 -->
+        <div class="card">
+            <div class="img-container">
+                <img src="IMG_6690.jpeg" alt="Я с девушкой">
+            </div>
+            <div class="card-content">
+                <div class="description">На этой фотке я стою со своей любимой девушкой. 🥰</div>
+                <div class="card-buttons">
+                    <button class="btn btn-small btn-toggle" onclick="toggleText(this)">✨ История</button>
+                    <button class="btn btn-small btn-like" onclick="toggleLike(this)">🤍 Лайк</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 7 -->
+        <div class="card">
+            <div class="img-container">
+                <img src="IMG_6692.jpeg" alt="Мама дурачится с пианино">
+            </div>
+            <div class="card-content">
+                <div class="description">Моя мама прикольно дурачится с пианино на свадьбе сестры! 🎹😄</div>
+                <div class="card-buttons">
+                    <button class="btn btn-small btn-toggle" onclick="toggleText(this)">✨ История</button>
+                    <button class="btn btn-small btn-like" onclick="toggleLike(this)">🤍 Лайк</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 8 -->
+        <div class="card">
+            <div class="img-container">
+                <img src="IMG_6693.jpeg" alt="Бабушка и дочери">
+            </div>
+            <div class="card-content">
+                <div class="description">Здесь стоит первая бабушка, а за ней стоят дочери: тетя Лиля, моя мама Зульфия и тетя Эльвира. Красавицы! 🌸</div>
+                <div class="card-buttons">
+                    <button class="btn btn-small btn-toggle" onclick="toggleText(this)">✨ История</button>
+                    <button class="btn btn-small btn-like" onclick="toggleLike(this)">🤍 Лайк</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 9 -->
+        <div class="card">
+            <div class="img-container">
+                <img src="IMG_6694.jpeg" alt="Свадьба, все гости">
+            </div>
+            <div class="card-content">
+                <div class="description">Масштабная парная фотка со свадьбы, там собрались все наши гости. 🎉🥂</div>
+                <div class="card-buttons">
+                    <button class="btn btn-small btn-toggle" onclick="toggleText(this)">✨ История</button>
+                    <button class="btn btn-small btn-like" onclick="toggleLike(this)">🤍 Лайк</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 10 -->
+        <div class="card">
+            <div class="img-container">
+                <img src="IMG_6695.jpeg" alt="Семейный кадр сестры">
+            </div>
+            <div class="card-content">
+                <div class="description">Самый теплый семейный кадр моей сестры с мамой, папой и всеми близкими. 👨‍👩‍👧‍👦</div>
+                <div class="card-buttons">
+                    <button class="btn btn-small btn-toggle" onclick="toggleText(this)">✨ История</button>
+                    <button class="btn btn-small btn-like" onclick="toggleLike(this)">🤍 Лайк</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Карточка 11 -->
+        <div class="card">
+            <div class="img-container">
+                <img src="IMG_6696.jpeg" alt="Мой любимый отец">
+            </div>
+            <div class="card-content">
+                <div class="description">На этой фотке мой любимый отец. Я его очень сильно люблю! 👑❤️</div>
+                <div class="card-buttons">
+                    <button class="btn btn-small btn-toggle" onclick="toggleText(this)">✨ История</button>
+                    <button class="btn btn-small btn-like" onclick="toggleLike(this)">🤍 Лайк</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        Сделано с любовью для самой лучшей семьи ✨
+    </footer>
+
+    <script>
+        // Функция для показа/скрытия текста (истории)
+        function toggleText(btn) {
+            const cardContent = btn.closest('.card-content');
+            const description = cardContent.querySelector('.description');
+            
+            if (description.style.display === 'block') {
+                description.style.display = 'none';
+                btn.innerHTML = '✨ История';
+            } else {
+                description.style.display = 'block';
+                btn.innerHTML = '🙈 Скрыть';
+            }
+        }
+
+        // Функция для лайков
+        function toggleLike(btn) {
+            btn.classList.toggle('liked');
+            if (btn.classList.contains('liked')) {
+                btn.innerHTML = '❤️ Лайк';
+            } else {
+                btn.innerHTML = '🤍 Лайк';
+            }
+        }
+
+        // Открыть все истории сразу
+        function showAllDescriptions() {
+            const descriptions = document.querySelectorAll('.description');
+            const toggleBtns = document.querySelectorAll('.btn-toggle');
+            
+            descriptions.forEach(desc => desc.style.display = 'block');
+            toggleBtns.forEach(btn => btn.innerHTML = '🙈 Скрыть');
+        }
+
+        // Эффект конфетти при нажатии "Сделать праздник"
+        function createParty() {
+            const colors = ['#ff8b73', '#ffaaa5', '#f2d74e', '#95e1d3', '#eaffd0'];
+            for (let i = 0; i < 100; i++) {
+                let confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                document.body.appendChild(confetti);
+                
+                // Удаляем конфетти после падения
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
